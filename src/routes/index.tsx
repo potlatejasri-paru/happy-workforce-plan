@@ -78,8 +78,8 @@ function Dashboard() {
     [scatter],
   );
 
-  const h1 = series[0].hires + series[1].hires + series[2].hires;
-  const h2 = series[9].hires + series[10].hires + series[11].hires;
+  const h1 = series[0]!.hires + series[1]!.hires + series[2]!.hires;
+  const h2 = series[9]!.hires + series[10]!.hires + series[11]!.hires;
   const hireDelta = +(((h2 - h1) / Math.max(1, h1)) * 100).toFixed(1);
   const e1 = series.slice(0, 3).reduce((a, s) => a + s.exits, 0);
   const e2 = series.slice(9).reduce((a, s) => a + s.exits, 0);
@@ -193,7 +193,7 @@ function Dashboard() {
             <p className="mt-3 text-xs text-muted-foreground">
               Applicant-to-hire conversion{" "}
               <span className="font-semibold text-primary">
-                {funnelData[funnelData.length - 1].rate}%
+                {funnelData[funnelData.length - 1]!.rate}%
               </span>
               , offer acceptance{" "}
               <span className="font-semibold text-primary">{k.offerAccept}%</span>.

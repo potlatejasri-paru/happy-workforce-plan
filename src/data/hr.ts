@@ -193,14 +193,14 @@ export function funnel(dept: Dept | "All") {
     { stage: "Offers", value: sum("offers") },
     { stage: "Hires", value: sum("hires") },
   ];
-  const top = stages[0].value || 1;
+  const top = stages[0]!.value || 1;
   return stages.map((s) => ({ ...s, rate: +((s.value / top) * 100).toFixed(1) }));
 }
 
 export function deptSummary() {
   return DEPARTMENTS.map((dept) => {
     const m = rows.filter((r) => r.dept === dept);
-    const last = m[m.length - 1];
+    const last = m[m.length - 1]!;
     const hires = m.reduce((a, r) => a + r.hires, 0);
     const exits = m.reduce((a, r) => a + r.exits, 0);
     const avgHead = m.reduce((a, r) => a + r.headcount, 0) / m.length;
@@ -246,7 +246,7 @@ export function hiringForecast(dept: Dept | "All", growthPct: number, horizon = 
   const exits = series.map((s) => s.exits);
   const heads = series.map((s) => s.headcount);
   const { slope, intercept } = linreg(exits);
-  const lastHead = heads[heads.length - 1];
+  const lastHead = heads[heads.length - 1]!;
   const avgExit = exits.reduce((a, b) => a + b, 0) / exits.length;
 
   const history = series.map((s) => ({
@@ -266,7 +266,7 @@ export function hiringForecast(dept: Dept | "All", growthPct: number, horizon = 
     const need = backfill + growth;
     const band = Math.max(1, avgExit * 0.35 + need * 0.18);
     future.push({
-      month: MONTHS[idx % 12],
+      month: MONTHS[idx % 12]!,
       actual: null as unknown as number,
       forecast: +need.toFixed(1),
       lower: +Math.max(0, need - band).toFixed(1),
@@ -301,7 +301,7 @@ export function kpis(dept: Dept | "All") {
   const staff = dept === "All" ? employees : employees.filter((e) => e.dept === dept);
   const offers = src.reduce((a, r) => a + r.offers, 0);
   return {
-    headcount: series[series.length - 1].headcount,
+    headcount: series[series.length - 1]!.headcount,
     hires,
     exits,
     turnover: +((exits / avgHead) * 100).toFixed(1),
@@ -312,6 +312,6 @@ export function kpis(dept: Dept | "All") {
     performance: +(src.reduce((a, r) => a + r.performance, 0) / src.length).toFixed(2),
     atRisk: staff.filter((e) => e.flightRisk > 0.55).length,
     staff: staff.length,
-    openRoles: series[series.length - 1].openRoles,
+    openRoles: series[series.length - 1]!.openRoles,
   };
 }
